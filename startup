@@ -5,7 +5,7 @@ sudo apt install make -y
 sudo apt install libglfw3-dev -y
 sudo apt install libglew-dev -y
 sudo apt install libglm-dev -y
-sudo apt install libglu1-mesa-d -y
+sudo apt install libgl1-mesa-dev -y
 sudo apt install freeglut3-dev -y
 sudo apt install libxi-dev -y
 cd /home/ubuntu/Desktop
