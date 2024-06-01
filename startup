@@ -7,6 +7,7 @@ sudo apt install libglew-dev -y
 sudo apt install libglm-dev -y
 sudo apt install libgl1-mesa-dev -y
 sudo apt install libglu1-mesa-d -y
+sudo apt install freeglut3-dev -y
 cd /home/ubuntu/Desktop
 git clone https://github.com/nejHate/testing
 sudo apt update
