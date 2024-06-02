@@ -1,105 +1,175 @@
-#include <GLFW/glfw3.h>
-#include <iostream>
+#include <GL/glut.h>
 #include <cmath>
 
 // Constants
 const int WIDTH = 800;
 const int HEIGHT = 600;
-const float CAMERA_SPEED = 0.05f;
-const float MOUSE_SENSITIVITY = 0.1f;
+const int CHUNK_SIZE = 16;
 
-// Camera variables
+// Camera parameters
 float cameraX = 0.0f;
 float cameraY = 0.0f;
-float cameraZ = 3.0f;
-float cameraYaw = -90.0f;
+float cameraZ = 5.0f;
+float cameraYaw = 0.0f;
 float cameraPitch = 0.0f;
-float lastMouseX = WIDTH / 2.0f;
-float lastMouseY = HEIGHT / 2.0f;
 
-// Function to handle mouse movement
-void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
-    float xOffset = xpos - lastMouseX;
-    float yOffset = lastMouseY - ypos;
-    lastMouseX = xpos;
-    lastMouseY = ypos;
+// Array representing the chunk
+int chunk[CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE];
 
-    xOffset *= MOUSE_SENSITIVITY;
-    yOffset *= MOUSE_SENSITIVITY;
-
-    cameraYaw += xOffset;
-    cameraPitch += yOffset;
-
-    if (cameraPitch > 89.0f) cameraPitch = 89.0f;
-    if (cameraPitch < -89.0f) cameraPitch = -89.0f;
-
-    float yawRad = (cameraYaw) * (3.14159f / 180.0f);
-    float pitchRad = (cameraPitch) * (3.14159f / 180.0f);
+// Function to initialize the chunk
+void initChunk() {
+    // Initialize the chunk array with block types
+    for (int i = 0; i < CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE; ++i) {
+        // Assign block types based on your data
+        chunk[i] = i % 3; // Just an example
+    }
 }
 
-// Function to handle keyboard input
-void processInput(GLFWwindow* window) {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
+// Function to render a single block at position (x, y, z)
+void renderBlock(float x, float y, float z, int blockType) {
+    // Set color based on block type
+    switch(blockType) {
+        case 0:
+            glColor3f(1.0f, 0.0f, 0.0f); // Red
+            break;
+        case 1:
+            glColor3f(0.0f, 1.0f, 0.0f); // Green
+            break;
+        case 2:
+            glColor3f(0.0f, 0.0f, 1.0f); // Blue
+            break;
+        // Add more cases for other block types
+    }
 
-    float cameraSpeed = CAMERA_SPEED;
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-        cameraSpeed *= 2.5;
-
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        cameraZ -= cameraSpeed;
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        cameraZ += cameraSpeed;
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        cameraX -= cameraSpeed;
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        cameraX += cameraSpeed;
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-        cameraY += cameraSpeed;
-    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-        cameraY -= cameraSpeed;
+    // Draw the cube
+    glBegin(GL_QUADS);
+    // Front face
+    glVertex3f(x - 0.5f, y - 0.5f, z + 0.5f);
+    glVertex3f(x + 0.5f, y - 0.5f, z + 0.5f);
+    glVertex3f(x + 0.5f, y + 0.5f, z + 0.5f);
+    glVertex3f(x - 0.5f, y + 0.5f, z + 0.5f);
+    // Back face
+    glVertex3f(x - 0.5f, y - 0.5f, z - 0.5f);
+    glVertex3f(x - 0.5f, y + 0.5f, z - 0.5f);
+    glVertex3f(x + 0.5f, y + 0.5f, z - 0.5f);
+    glVertex3f(x + 0.5f, y - 0.5f, z - 0.5f);
+    // Top face
+    glVertex3f(x - 0.5f, y + 0.5f, z - 0.5f);
+    glVertex3f(x - 0.5f, y + 0.5f, z + 0.5f);
+    glVertex3f(x + 0.5f, y + 0.5f, z + 0.5f);
+    glVertex3f(x + 0.5f, y + 0.5f, z - 0.5f);
+    // Bottom face
+    glVertex3f(x - 0.5f, y - 0.5f, z - 0.5f);
+    glVertex3f(x + 0.5f, y - 0.5f, z - 0.5f);
+    glVertex3f(x + 0.5f, y - 0.5f, z + 0.5f);
+    glVertex3f(x - 0.5f, y - 0.5f, z + 0.5f);
+    // Right face
+    glVertex3f(x + 0.5f, y - 0.5f, z - 0.5f);
+    glVertex3f(x + 0.5f, y + 0.5f, z - 0.5f);
+    glVertex3f(x + 0.5f, y + 0.5f, z + 0.5f);
+    glVertex3f(x + 0.5f, y - 0.5f, z + 0.5f);
+    // Left face
+    glVertex3f(x - 0.5f, y - 0.5f, z - 0.5f);
+    glVertex3f(x - 0.5f, y - 0.5f, z + 0.5f);
+    glVertex3f(x - 0.5f, y + 0.5f, z + 0.5f);
+    glVertex3f(x - 0.5f, y + 0.5f, z - 0.5f);
+    glEnd();
 }
 
-int main() {
-    // Initialize GLFW
-    if (!glfwInit()) {
-        std::cerr << "Failed to initialize GLFW" << std::endl;
-        return -1;
+// Function to render the chunk of blocks
+void renderChunk() {
+    // Iterate through the chunk array and render each block
+    for (int x = 0; x < CHUNK_SIZE; ++x) {
+        for (int y = 0; y < CHUNK_SIZE; ++y) {
+            for (int z = 0; z < CHUNK_SIZE; ++z) {
+                int index = x + y * CHUNK_SIZE + z * CHUNK_SIZE * CHUNK_SIZE;
+                int blockType = chunk[index];
+                float posX = x - CHUNK_SIZE / 2.0f + 0.5f;
+                float posY = y - CHUNK_SIZE / 2.0f + 0.5f;
+                float posZ = z - CHUNK_SIZE / 2.0f + 0.5f;
+                renderBlock(posX, posY, posZ, blockType);
+            }
+        }
     }
+}
 
-    // Create a windowed mode window and its OpenGL context
-    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Minecraft-like Game", NULL, NULL);
-    if (!window) {
-        std::cerr << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
+// Function to render the scene
+void renderScene() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+    
+    // Set up camera
+    glRotatef(-cameraPitch, 1.0f, 0.0f, 0.0f);
+    glRotatef(-cameraYaw, 0.0f, 1.0f, 0.0f);
+    glTranslatef(-cameraX, -cameraY, -cameraZ);
+    
+    // Render the chunk of blocks
+    renderChunk();
+    
+    glutSwapBuffers();
+}
+
+void keyboard(unsigned char key, int x, int y) {
+    // Handle key presses to move the camera
+    switch(key) {
+        case 'w':
+            // Move camera forward
+            cameraZ -= 0.1f * cos(cameraYaw);
+            cameraX += 0.1f * sin(cameraYaw);
+            break;
+        case 's':
+            // Move camera backward
+            cameraZ += 0.1f * cos(cameraYaw);
+            cameraX -= 0.1f * sin(cameraYaw);
+            break;
+        case 'a':
+            // Strafe camera left
+            cameraX -= 0.1f * cos(cameraYaw);
+            cameraZ -= 0.1f * sin(cameraYaw);
+            break;
+        case 'd':
+            // Strafe camera right
+            cameraX += 0.1f * cos(cameraYaw);
+            cameraZ += 0.1f * sin(cameraYaw);
+            break;
+        case 'q':
+            // Move camera up
+            cameraY += 0.1f;
+            break;
+        case 'e':
+            // Move camera down
+            cameraY -= 0.1f;
+            break;
     }
-    // Make the window's context current
-    glfwMakeContextCurrent(window);
-    // Set the required callback functions
-    glfwSetCursorPosCallback(window, mouse_callback);
+}
 
-    // Loop until the user closes the window
-    while (!glfwWindowShouldClose(window)) {
-        // Process input
-        processInput(window);
+// Function to handle mouse input
+void mouse(int x, int y) {
+    // Update camera yaw and pitch based on mouse movement
+    cameraYaw += (x - WIDTH / 2) * 0.01f;
+    cameraPitch += (y - HEIGHT / 2) * 0.01f;
+    glutWarpPointer(WIDTH / 2, HEIGHT / 2); // Center mouse cursor
+}
 
-        // Render here
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+int main(int argc, char** argv) {
+    // Initialize GLUT
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutInitWindowSize(WIDTH, HEIGHT);
+    glutCreateWindow("3D Block Game");
 
-        // Camera transformation
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        gluLookAt(cameraX, cameraY, cameraZ, cameraX + cos(cameraYaw), cameraY + sin(cameraPitch), cameraZ + sin(cameraYaw), 0.0f, 1.0f, 0.0f);
+    // Set up OpenGL
+    glEnable(GL_DEPTH_TEST);
+    glutDisplayFunc(renderScene);
+    glutIdleFunc(renderScene);
+    glutKeyboardFunc(keyboard);
+    glutPassiveMotionFunc(mouse);
 
-        // Draw your blocks here
+    // Initialize the chunk
+    initChunk();
 
-        // Swap front and back buffers
-        glfwSwapBuffers(window);
-        // Poll for and process events
-        glfwPollEvents();
-    }
-    // Terminate GLFW
-    glfwTerminate();
+    // Start the main loop
+    glutMainLoop();
+
     return 0;
 }
