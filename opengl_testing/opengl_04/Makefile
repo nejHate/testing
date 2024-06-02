@@ -1,6 +1,6 @@
 CC=g++
 CFLAGS=-Wall
-LDFLAGS=-lGL -lGLEW -lglfw
+LDFLAGS=-lGL -lGLEW -lglfw -lglut
 
 SOURCES=main.cpp
 EXECUTABLE=opengl_cube
