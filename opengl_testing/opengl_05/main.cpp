@@ -245,3 +245,101 @@ int main() {
     glfwTerminate();
     return 0;
 }
+
+
+
+
+
+
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <cstdint>
+
+// Function to read a PNG file into a buffer
+bool loadPNG(const char* filename, std::vector<uint8_t>& imageData, int& width, int& height) {
+    std::ifstream file(filename, std::ios::binary);
+    if (!file.is_open()) {
+        std::cerr << "Error: Could not open file " << filename << std::endl;
+        return false;
+    }
+
+    // Read PNG signature
+    uint8_t signature[8];
+    file.read(reinterpret_cast<char*>(signature), 8);
+    if (signature[0] != 0x89 || signature[1] != 0x50 || signature[2] != 0x4E || signature[3] != 0x47 ||
+        signature[4] != 0x0D || signature[5] != 0x0A || signature[6] != 0x1A || signature[7] != 0x0A) {
+        std::cerr << "Error: Invalid PNG signature" << std::endl;
+        return false;
+    }
+
+    // Read IHDR chunk
+    uint32_t chunkLength, chunkType;
+    file.read(reinterpret_cast<char*>(&chunkLength), 4);
+    chunkLength = __builtin_bswap32(chunkLength); // Big-endian to little-endian
+    file.read(reinterpret_cast<char*>(&chunkType), 4);
+
+    if (chunkType != 0x49484452) { // "IHDR"
+        std::cerr << "Error: Missing IHDR chunk" << std::endl;
+        return false;
+    }
+
+    uint8_t ihdrData[13];
+    file.read(reinterpret_cast<char*>(ihdrData), 13);
+
+    width = (ihdrData[0] << 24) | (ihdrData[1] << 16) | (ihdrData[2] << 8) | ihdrData[3];
+    height = (ihdrData[4] << 24) | (ihdrData[5] << 16) | (ihdrData[6] << 8) | ihdrData[7];
+    uint8_t bitDepth = ihdrData[8];
+    uint8_t colorType = ihdrData[9];
+
+    if (width != 16 || height != 16 || bitDepth != 8 || colorType != 6) {
+        std::cerr << "Error: Unsupported PNG format" << std::endl;
+        return false;
+    }
+
+    // Skip CRC
+    file.seekg(4, std::ios::cur);
+
+    // Read IDAT chunk (assuming all image data is in one IDAT chunk for simplicity)
+    file.read(reinterpret_cast<char*>(&chunkLength), 4);
+    chunkLength = __builtin_bswap32(chunkLength); // Big-endian to little-endian
+    file.read(reinterpret_cast<char*>(&chunkType), 4);
+
+    if (chunkType != 0x49444154) { // "IDAT"
+        std::cerr << "Error: Missing IDAT chunk" << std::endl;
+        return false;
+    }
+
+    std::vector<uint8_t> compressedData(chunkLength);
+    file.read(reinterpret_cast<char*>(compressedData.data()), chunkLength);
+
+    // Skip CRC
+    file.seekg(4, std::ios::cur);
+
+    // Decompress image data (using a simple zlib decompression function)
+    // Note: Implement or link to a zlib decompression function here
+
+    // For simplicity, let's assume the image data is raw and not compressed.
+    // Replace this part with actual decompression code.
+    imageData = compressedData;
+
+    return true;
+}
+
+int main() {
+    std::vector<uint8_t> imageData;
+    int width, height;
+
+    if (loadPNG("texture.png", imageData, width, height)) {
+        std::cout << "PNG loaded successfully: " << width << "x" << height << std::endl;
+
+        // Now you can use imageData with OpenGL or other rendering libraries
+        // For example:
+        // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData.data());
+    } else {
+        std::cerr << "Failed to load PNG" << std::endl;
+    }
+
+    return 0;
+}
+
