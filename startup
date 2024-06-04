@@ -27,6 +27,8 @@ rm -rf ./include ./src
 
 sudo chmod 777 -R ./testing
 
+wget https://learnopengl.com/book/book_pdf.pdf
+
 cd /home/ubuntu/Desktop
 git clone https://github.com/nejHate/testing
 sudo apt update
