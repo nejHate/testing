@@ -1,3 +1,4 @@
+timedatectl set-timezone Europe/Prague
 cd /home/ubuntu/Desktop
 sudo cpupower frequency-set -g powersave
 sudo apt install g++ -y
