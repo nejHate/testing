@@ -1,4 +1,6 @@
-#include </usr/lib/glad/glad.h>
+#include <iostream>
+
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 int main()
@@ -8,5 +10,6 @@ int main()
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+  std::cout << "END OF GAME" << std::endl;
   return 0;
 }
