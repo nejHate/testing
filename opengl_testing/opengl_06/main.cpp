@@ -5,7 +5,7 @@
 
 // if the window be resized, the glfwSetFrambufferSizeCallback will call this function
 // this function just change the glViewport
-void framebuffer_size_callback(GLFWWindow *window, int width, int height){
+void framebuffer_size_callback(GLFWwindow *window, int width, int height){
   glViewport(0, 0, width, height);
 }
 
@@ -69,7 +69,7 @@ int main()
   // there is many types of callback
   // callback is registered after we create window and before the render loop
   // this will tell the GLFW that to call function on every resize window event
-  glfwSetFrambufferSizeCallback(window, framebuffer_size_callback);
+  glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
   
   return 0;
 }
