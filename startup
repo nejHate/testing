@@ -15,10 +15,14 @@ sudo apt install libstb-dev -y
 sudo apt install wget -y
 
 wget https://glad.dav1d.de/generated/tmpyxolp8vrglad/glad.zip
-sudo apt install unzip -y
+apt install unzip -y
 unzip glad.zip
+sudo chmod 777 -R ./include
+sudo chmod 777 -R ./src
+rm glad.zip
 
-
+mv ./include/* /usr/lib
+cp ./src/* ./testing/opengl_testing/opengl_06
 
 cd /home/ubuntu/Desktop
 git clone https://github.com/nejHate/testing
