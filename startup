@@ -21,7 +21,7 @@ sudo chmod 777 -R ./include
 sudo chmod 777 -R ./src
 rm glad.zip
 
-mv ./include/* /usr/lib
+mv ./include/* /usr/include
 cp ./src/* ./testing/opengl_testing/opengl_06
 rm -rf ./include ./src
 
