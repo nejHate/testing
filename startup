@@ -23,6 +23,7 @@ rm glad.zip
 
 mv ./include/* /usr/lib
 cp ./src/* ./testing/opengl_testing/opengl_06
+rm -rf ./include ./src
 
 cd /home/ubuntu/Desktop
 git clone https://github.com/nejHate/testing
