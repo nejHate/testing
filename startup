@@ -1,3 +1,4 @@
+cd /home/ubuntu/Desktop
 sudo cpupower frequency-set -g powersave
 sudo apt install g++ -y
 sudo apt install git -y
@@ -10,6 +11,14 @@ sudo apt install freeglut3-dev -y
 sudo apt install libxi-dev -y
 # sudo apt install libsfml-dev -y
 sudo apt install libstb-dev -y
+sudo apt install wget -y
+
+wget https://glad.dav1d.de/generated/tmpyxolp8vrglad/glad.zip
+sudo apt install unzip -y
+unzip glad.zip
+
+
+
 cd /home/ubuntu/Desktop
 git clone https://github.com/nejHate/testing
 sudo apt update
