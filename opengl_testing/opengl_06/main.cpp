@@ -78,11 +78,16 @@ int main()
   // this will tell the GLFW that to call function on every resize window event
   glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
   
+  // we can set the "background" color so when the glClear is called, it will set the entire buffer to that colour
+  glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+  
   // creating the game loop
   // the while loop end, when the user click the close button
   // later there will be more option to exit the loop
   uint64_t framecounter = 0;  // why not 32 bit? well realistically nobody open game for 138 days with 360 fps but...
   while(!glfwWindowShouldClose(window)){
+    // we call glClear to clean the buffer to default background we set
+    glClear(GL_COLOR_BUFFER_BIT);
     // there are two buffers, one is being displayed and rendering is happening on the second and they swap
     // why is there two you can find online
     // write: why double buffering and read why
