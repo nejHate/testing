@@ -54,7 +54,7 @@ int main()
     return -1;
   }
   
-  // I have some toughts what this do so sorry if the explanation isn't correct
+  // I have some thoughts what this do so sorry if the explanation isn't correct
   // it will transform coordinates from (-1, 1) to (0, widows_size)
   // so if we set window size and viewport to same number
   // the coordination (-0.5, 0.5) to (200, 450)
@@ -70,6 +70,21 @@ int main()
   // callback is registered after we create window and before the render loop
   // this will tell the GLFW that to call function on every resize window event
   glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+  
+  // creating the game loop
+  // the while loop end, when the user click the close button
+  // later there will be more option to exit the loop
+  while(!glfwWindowShouldClose(window)){
+    // there are two buffers, one is being displayed and rendering is happening on the second and they swap
+    // why is there two you can find online
+    // write: why double buffering and read why
+    // there can be more buffers like triple buffering but I'm new to opengl so I don't know how how to implement etc
+    glfwSwapBuffers(window);
+    // this function check if any events happens and update the window state and calls the corresponding events
+    // like keyboard, mouse (and probably resize too)
+    glfwPollEvents();
+  }
+  
   
   return 0;
 }
