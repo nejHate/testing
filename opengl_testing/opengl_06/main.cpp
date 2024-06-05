@@ -99,7 +99,7 @@ int main()
       glfwSetWindowShouldClose(window, true);
     }
   }
-  std::cout << "number of frames: " << i << std::endl;
+  std::cout << "number of frames: " << framecounter << std::endl;
   std::cout << "END OF GAME" << std::endl;
   
   return 0;
