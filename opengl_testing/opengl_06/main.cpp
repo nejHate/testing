@@ -9,6 +9,14 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height){
   glViewport(0, 0, width, height);
 }
 
+void processInput(GLFWwindow *window){
+  //if the esc key is pressed the window will close
+  if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
+    //set the parameter to true so when it start checking the while cycle it will end the while cycle
+    glfwSetWindowShouldClose(window, true);
+  }
+}
+
 int main()
 {
   // initialization of GLFW
@@ -73,6 +81,7 @@ int main()
   // creating the game loop
   // the while loop end, when the user click the close button
   // later there will be more option to exit the loop
+  uint64_t framecounter = 0;  // why not 32 bit? well realistically nobody open game for 138 days with 360 fps but...
   while(!glfwWindowShouldClose(window)){
     // there are two buffers, one is being displayed and rendering is happening on the second and they swap
     // why is there two you can find online
@@ -82,8 +91,15 @@ int main()
     // this function check if any events happens and update the window state and calls the corresponding events
     // like keyboard, mouse (and probably resize too)
     glfwPollEvents();
+    
+    // increase the number of frames counter
+    framecounter++;
+    // just automatic closing when programing, so i can just wait to close
+    if(framecounter == 200){
+      glfwSetWindowShouldClose(window, true);
+    }
   }
-  
+  std::cout << "number of frames: " << i << std::endl;
   std::cout << "END OF GAME" << std::endl;
   
   return 0;
