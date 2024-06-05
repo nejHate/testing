@@ -21,7 +21,6 @@ int main()
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   // for MAC (to run the app on mac)
   // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // for MAC
-  std::cout << "END OF GAME" << std::endl;
   
   // object that holds window data
   // first two arguments is width and height of the window
@@ -85,6 +84,7 @@ int main()
     glfwPollEvents();
   }
   
+  std::cout << "END OF GAME" << std::endl;
   
   return 0;
 }
