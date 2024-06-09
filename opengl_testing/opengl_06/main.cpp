@@ -1,7 +1,15 @@
 #include <iostream>
+#include <chrono>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
+
+// just for testing time
+long long current_time() {
+    auto now = std::chrono::high_resolution_clock::now();
+    return std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count();
+}
 
 // if the window be resized, the glfwSetFrambufferSizeCallback will call this function
 // this function just change the glViewport
@@ -81,10 +89,40 @@ int main()
   // we can set the "background" color so when the glClear is called, it will set the entire buffer to that colour
   glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
   
+  // just to see the performance, we can disable the wait for screen to swap bufers
+  // because without that it only create 60 swaps when using 60fps monitor
+  glfwSwapInterval(0);
+  
+  // to render a single triangle, we must specify the vertex of the triangle
+  float vertices[] = {
+		-0.5f, -0.5f, 0.0f,
+		 0.5f, -0.5f, 0.0f,
+		 0.0f,  0.5f, 0.0f
+     };
+
+	// I don't really know what exactly all these steps do but I will try to explain them as I can
+	
+	// this is an inteager storinf an ID of the buffer we create
+	unsigned int VBO;
+	// we create an object buffer and bind it to the ID
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+
+
+
+
+
+
+
+
+  
   // creating the game loop
   // the while loop end, when the user click the close button
   // later there will be more option to exit the loop
   uint64_t framecounter = 0;  // why not 32 bit? well realistically nobody open game for 138 days with 360 fps but...
+  auto start = current_time();
   while(!glfwWindowShouldClose(window)){
     // we call glClear to clean the buffer to default background we set
     glClear(GL_COLOR_BUFFER_BIT);
@@ -99,13 +137,17 @@ int main()
     
     // increase the number of frames counter
     framecounter++;
+    
+    //std::cout << framecounter << std::endl;
     // just automatic closing when programing, so i can just wait to close
-    if(framecounter == 200){
+    if(framecounter == 10000){
       glfwSetWindowShouldClose(window, true);
     }
   }
+  auto end = current_time();
   std::cout << "number of frames: " << framecounter << std::endl;
-  std::cout << "END OF GAME" << std::endl;
+  std::cout << "framerate: "<< framecounter/((float)(end-start)/1000000000) << "fps" << std::endl;
+  std::cout << "END OF GAME" << std::endl << std::endl;
   
   return 0;
 }
