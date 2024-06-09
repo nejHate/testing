@@ -125,6 +125,8 @@ int main()
   auto start = current_time();
   while(!glfwWindowShouldClose(window)){
     // we call glClear to clean the buffer to default background we set
+    // the GL_COLOR_BUFFER_BIT is command which is saying what we want to clear
+    // we can clear/set COLOR, DEPTH and STENCIL but now we clear the color buffer
     glClear(GL_COLOR_BUFFER_BIT);
     // there are two buffers, one is being displayed and rendering is happening on the second and they swap
     // why is there two you can find online
