@@ -47,6 +47,7 @@ int main()
   // GLFWwindow *share -> The window whose context to share resources with (can be NULL)
   // this command create a window of the size first and second parameter
   GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
+  // GLFWwindow* window = glfwCreateWindow(1920, 1080, "LearnOpenGL", NULL, NULL);
   // check if the object was created
   // if no, print error and exit
   if(window == NULL){
@@ -77,6 +78,7 @@ int main()
   // if the numbers is larger, it will show only a portion of the image
   // if the numbers is smaller, it will show the image in portion of the window surrounded by blank space
   glViewport(0, 0, 800, 600);
+  // glViewport(0, 0, 1920, 1080);
   
   // i am going by the book so now they create a function called framebuffer_size_callback
   // look above to find it, it will be used in next code
@@ -100,14 +102,15 @@ int main()
 		 0.0f,  0.5f, 0.0f
      };
 
-	// I don't really know what exactly all these steps do but I will try to explain them as I can
+  // I don't really know what exactly all these steps do but I will try to explain them as I can
 	
-	// this is an inteager storinf an ID of the buffer we create
-	unsigned int VBO;
-	// we create an object buffer and bind it to the ID
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+  // this is an inteager storinf an ID of the buffer we create
+  unsigned int VBO;
+  // we create an object buffer and bind it to the ID
+  glGenBuffers(1, &VBO);
+  // 
+  glBindBuffer(GL_ARRAY_BUFFER, VBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 
 
