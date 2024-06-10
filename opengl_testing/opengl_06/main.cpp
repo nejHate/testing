@@ -5,6 +5,18 @@
 #include <GLFW/glfw3.h>
 
 
+// for now we create simple vertex shader
+// vertex shader is the part of rendering we can programe
+// vertex shader look similar to C/C++
+// this is only temporary so we can render the triangle
+// later it will be discuss in more detail
+const char *vertexShaderSource = "#version 330 core\n"
+"layout (location = 0) in vec3 aPos;\n"
+"void main()\n"
+"{\n"
+" gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"}\0";
+
 // just for testing time
 long long current_time() {
     auto now = std::chrono::high_resolution_clock::now();
@@ -24,6 +36,9 @@ void processInput(GLFWwindow *window){
     glfwSetWindowShouldClose(window, true);
   }
 }
+
+// shader is dynamically compiled at run-time from source code
+
 
 int main()
 {
