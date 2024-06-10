@@ -132,7 +132,9 @@ int main()
   // shader is dynamically compiled at run-time from source code
   // first we must create an unsigned int to store the ID of object
   unsigned int vertexShader;
+  // we provide the type of shader we want vertex shader -> GL_VERTEX_SHADER
   vertexShader = glCreateShader(GL_VERTEX_SHADER);
+  
   glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
   glCompileShader(vertexShader);
 
