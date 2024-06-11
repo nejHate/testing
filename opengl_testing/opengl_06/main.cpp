@@ -17,6 +17,13 @@ const char *vertexShaderSource = "#version 330 core\n"
 " gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
 "}\0";
 
+const char *fragmentShaderSource = "#version 330 core\n"
+"out vec4 FragColor;\n"
+"void main()\"
+"{\n"
+"FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+"}\0";
+
 // just for testing time
 long long current_time() {
     auto now = std::chrono::high_resolution_clock::now();
@@ -129,19 +136,42 @@ int main()
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
   
+  // vertex shader
   // shader is dynamically compiled at run-time from source code
   // first we must create an unsigned int to store the ID of object
   unsigned int vertexShader;
   // we provide the type of shader we want vertex shader -> GL_VERTEX_SHADER
   vertexShader = glCreateShader(GL_VERTEX_SHADER);
-  
+  // this function tahes the object with ID, number of strings, string with vertex shader and the last argument we set to NULL
   glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+  // now we compile the shader now
   glCompileShader(vertexShader);
+  
+  // if we want to check if the compilation was successfull, we can check it
+  int success;
+  char infoLog[512];
+  glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+  
+  if(!success){
+  glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+  std::cout << "ERROR shader vertex compilation failed\n" << infoLog << " " << __LINE << std::endl;
+  }
+  
+  // fragment shader 
+  // it is second and last shader we create for rendering triangle
+  // fragment shader is all about calculating the color output of pixel
+  // to keep it now simple we output always orange color
+  // (color have 4 values Red, Green, Blue and Alpha)
+  // we define the string up in this file and call it fragmentShaderSource
+  // the process of making and compiling will be similar to vertex shader
+  // TODO
+  unsigned int fragmentShader;
+  fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+  glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+  glCompileShader(fragmentShader);
 
-
-
-
-
+  // shader program
+  // 
 
 
 
