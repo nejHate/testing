@@ -193,6 +193,34 @@ int main()
   glDeleteShader(vertexShader);
   glDeleteShader(fragmentShader);
 
+  // we are almost there but now we must tell the opengl how to interpret the vertex data before rendering
+  // our vertex data is formatted as follow
+  // | vertex 0  | vertex 1  | vertex 2  |
+  // | X | Y | Z | X | Y | Z | X | Y | Z |
+  // 0   4   8   12  16  20  24  28  32  36 bytes
+  // it is 12 bytes per vertex and there is no space between each vertex and the data starts with offset 0
+  //with information we can tell the opengl how it should interpret the vertex data (per vertex attribute) using
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+  glEnableVertexAttribArray(0);
+  
+  
+  // TODO
+  unsigned int VAO;
+  glGenVertexArrays(1, &VAO);
+  // 0. copy our vertices array in a buffer for OpenGL to use
+  glBindBuffer(GL_ARRAY_BUFFER, VBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+  // 1. then set the vertex attributes pointers
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),
+  (void*)0);
+  glEnableVertexAttribArray(0);
+  // 2. use our shader program when we want to render an object
+  glUseProgram(shaderProgram);
+  // 3. now draw the object
+  glUseProgram(shaderProgram);
+  glBindVertexArray(VAO);
+  glDrawArrays(GL_TRIANGLES, 0, 3);
+
 
 
   
