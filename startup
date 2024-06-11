@@ -1,5 +1,5 @@
 timedatectl set-timezone Europe/Prague
-cd /home/ubuntu/Desktop
+cd /home/$(hostname)/Desktop
 sudo cpupower frequency-set -g powersave
 sudo apt install g++ -y
 sudo apt install git -y
@@ -29,7 +29,7 @@ sudo chmod 777 -R ./testing
 
 wget https://learnopengl.com/book/book_pdf.pdf
 
-cd /home/ubuntu/Desktop
+cd /home/$(hostname)/Desktop
 git clone https://github.com/nejHate/testing
 sudo apt update
 sudo apt upgrade -y
