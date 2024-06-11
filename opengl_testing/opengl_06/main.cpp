@@ -154,7 +154,7 @@ int main()
   
   if(!success){
   glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-  std::cout << "ERROR shader vertex compilation failed\n" << infoLog << " " << __LINE << std::endl;
+  std::cout << "ERROR shader vertex compilation failed\n" << infoLog << " " << __LINE__ << std::endl;
   }
   
   // fragment shader 
@@ -171,8 +171,27 @@ int main()
   glCompileShader(fragmentShader);
 
   // shader program
-  // 
-
+  // it will combine multiple shaders combined
+  // we will link them to a shader program and activate it when rendering objects
+  //first we will create an program and return the ID of the shader program
+  unsigned int shaderProgram;
+  shaderProgram = glCreateProgram();
+  // after that we attach the the compiled shaders into the program
+  glAttachShader(shaderProgram, vertexShader);
+  glAttachShader(shaderProgram, fragmentShader);
+  // and then link them
+  glLinkProgram(shaderProgram);
+  // we can check if the the linking was successfully
+  glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+  if (!success){
+  glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+  std::cout << "ERROR shader program linking shader and vertex fragment failed\n" << infoLog << " " << __LINE__ << std::endl;
+  }
+  // now activate the program
+  glUseProgram(shaderProgram);
+  // and delete shaders object because we no longer need them
+  glDeleteShader(vertexShader);
+  glDeleteShader(fragmentShader);
 
 
 
