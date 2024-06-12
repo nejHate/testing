@@ -1,3 +1,4 @@
+// github.com/JoeyDeVries/learnopengl
 #include <iostream>
 #include <chrono>
 
@@ -85,6 +86,14 @@ int main()
   // (if I understand this correctly)
   glfwMakeContextCurrent(window);
   
+  // i am going by the book so now they create a function called framebuffer_size_callback
+  // look above to find it, it will be used in next code
+  
+  // there is many types of callback
+  // callback is registered after we create window and before the render loop
+  // this will tell the GLFW that to call function on every resize window event
+  glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+  
   // glad manages pointers to the opengl functions
   // the function pointers is OS specific
   // it will help us find correct function to the OS which the code is compiled for
@@ -103,14 +112,6 @@ int main()
   // if the numbers is smaller, it will show the image in portion of the window surrounded by blank space
   glViewport(0, 0, 800, 600);
   // glViewport(0, 0, 1920, 1080);
-  
-  // i am going by the book so now they create a function called framebuffer_size_callback
-  // look above to find it, it will be used in next code
-  
-  // there is many types of callback
-  // callback is registered after we create window and before the render loop
-  // this will tell the GLFW that to call function on every resize window event
-  glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
   
   // we can set the "background" color so when the glClear is called, it will set the entire buffer to that colour
   glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
